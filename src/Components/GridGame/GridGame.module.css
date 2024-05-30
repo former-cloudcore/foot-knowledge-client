@@ -1,0 +1,18 @@
+.gridGame {
+}
+
+.row{
+	display: flex;
+}
+
+.topLeft{
+	width: var(--grid-item-size);
+	height: var(--grid-item-size);
+	border: 1px solid black;
+
+	img{
+		height: 100%;
+		width: 100%;
+		
+	}
+}
