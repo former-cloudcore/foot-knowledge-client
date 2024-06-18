@@ -2,13 +2,13 @@ import GridFilter from './GridFilter/GridFilter';
 import css from './GridGame.module.css';
 import { useEffect, useState } from 'react';
 import { Filter } from '../../utils/interfaces';
-
 import { defaultPresets, top_left_image } from '../../utils/consts';
 import { getRandomFilters, translateFilters } from '../../utils/utils';
 import GridItem from './GridItem/GridItem';
 import SearchBox from '../SearchBox/SearchBox';
 import GridSizeDropDown from './GridSizeDropDown/GridSizeDropDown';
 import FiltersSelectorDropDown from './FiltersSelectorDropDown/FiltersSelectorDropDown';
+import ScoreBar from './ScoreBar/ScoreBar';
 
 const GridGame = () => {
   const [gridSizeState, setGridSizeState] = useState<[number, number]>([5, 5]);
@@ -19,6 +19,8 @@ const GridGame = () => {
     sideFilters: [],
     topFilters: [],
   });
+  const [playersNumber, setPlayersNumber] = useState(0);
+  const [squaresNumber, setSquaresNumber] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -52,7 +54,7 @@ const GridGame = () => {
         if (j === 0) {
           row.push(<GridFilter {...sideFilters[i - 1]} key={`${i}-${j}`} />);
           continue;
-        }
+        } 
 
         row.push(
           <GridItem
@@ -63,6 +65,8 @@ const GridGame = () => {
             currentFocused={currentFocused}
             searchedPlayer={searchedPlayer}
             onClick={() => setCurrentFocused(`${i}-${j}`)}
+            onPlayerAdded={() => setPlayersNumber(playersNumber + 1)}
+            onSquareAdded={() => setSquaresNumber(prevSquaresNumber => prevSquaresNumber + 1)}
           />
         );
       }
@@ -78,10 +82,10 @@ const GridGame = () => {
 
   return (
     <div className={css.page} style={{ '--grid-item-size': '10rem' } as React.CSSProperties}>
+      <ScoreBar playersNumber={playersNumber} squaresNumber={squaresNumber}></ScoreBar>
       <div className={css.gridGame}>
         <div className={css.topBar}>
           <SearchBox onSelect={(playerid) => setSearchedPlayer({ player_id: playerid })} />
-
           <FiltersSelectorDropDown onChange={(filters) => setFilterState(filters)} />
           <GridSizeDropDown gridSizeState={gridSizeState} setGridSizeState={setGridSizeState} />
         </div>

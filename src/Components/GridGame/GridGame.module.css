@@ -3,7 +3,10 @@
   margin-top: 5vh;
   display: flex;
   flex-direction: column;
+  row-gap: 5px;
+  --grid-color: #f2a4f2;
 }
+
 .gridGame {
   display: flex;
   flex-direction: column;
@@ -19,7 +22,7 @@
 .topLeft {
   width: var(--grid-item-size);
   height: var(--grid-item-size);
-  border: 1px solid #ff5aff;
+  border: 1px solid var(--grid-color);
 
   img {
     height: 100%;

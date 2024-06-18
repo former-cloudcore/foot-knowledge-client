@@ -1,0 +1,71 @@
+.page {
+    height: 100vh;
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    --grid-color: #f2a4f2;
+  }
+  
+  .gridGame {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    user-select: none;
+    background-color: white;
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .topLeft {
+    width: var(--grid-item-size);
+    height: var(--grid-item-size);
+    border: 1px solid var(--grid-color);
+  
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  
+  .topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .buttonsContainer {
+    display: flex;
+  
+  }
+  
+  .button {
+    background-color: var(--grid-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin: auto;
+    border-radius: 19px;
+  }
+  
+  .scoresContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--grid-color);
+    flex-direction: column;
+    border-radius: 15px;
+    padding: 5px;
+  }
+  
+  .score{
+    font-size: 20px;
+    color: white;
+  }
