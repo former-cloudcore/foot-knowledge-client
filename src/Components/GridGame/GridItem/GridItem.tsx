@@ -14,11 +14,21 @@ interface GridItemProps {
   currentFocused: string;
   searchedPlayer: { player_id: number };
   onClick?: () => void;
+  onPlayerAdded: () => void;
+  onSquareAdded: () => void;
 }
-const GridItem = ({ filter1, filter2, id, currentFocused, searchedPlayer, onClick }: GridItemProps) => {
+const GridItem = ({ filter1, filter2, id, currentFocused, searchedPlayer, onClick, onPlayerAdded: playerAdded, onSquareAdded: squareAdded }: GridItemProps) => {
   const [resultsState, setResultsState] = useState<playerSchema[]>([]);
   const [confirmedPlayers, setConfirmedPlayers] = useState<playerSchema[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const updateScore = () => {
+    playerAdded();
+    console.log(confirmedPlayers)
+    if (confirmedPlayers.length === 0) {
+      squareAdded();
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -40,6 +50,7 @@ const GridItem = ({ filter1, filter2, id, currentFocused, searchedPlayer, onClic
       const player = resultsState.find((player) => player.player_id === searchedPlayer.player_id);
       if (player) {
         setConfirmedPlayers((a) => [...a, player]);
+        updateScore();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
