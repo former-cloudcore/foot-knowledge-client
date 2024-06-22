@@ -72,4 +72,5 @@ export const logout = async (): Promise<void> => {
         },
     });
     localStorage.removeItem('token');
+    window.location.reload();
 };
