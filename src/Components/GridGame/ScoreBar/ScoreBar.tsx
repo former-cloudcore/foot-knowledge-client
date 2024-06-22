@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { add_player_to_scoreboard } from '../../../utils/api';
+import { add_player_to_scoreboard } from '../../../utils/api/api.ts';
 import QuitModal from '../QuitModal/QuitModal';
 import css from './ScoreBar.module.css';
 import { useNavigate } from 'react-router-dom';
