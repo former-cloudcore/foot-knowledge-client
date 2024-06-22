@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../../../utils/api/auth';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
+import Logo from "../../Logo/Logo.tsx";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -28,6 +29,7 @@ const Login = () => {
                 justifyContent="center"
                 height="100vh"
             >
+                <Logo />
                 <Typography variant="h4" component="h1" gutterBottom>
                     Login
                 </Typography>

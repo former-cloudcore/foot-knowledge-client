@@ -63,3 +63,13 @@ export const validateSession = async (): Promise<{ success: boolean }> => {
 
     return response.json();
 };
+
+export const logout = async (): Promise<void> => {
+    await fetch(`${AUTH_API_BASE}/auth/logout`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    localStorage.removeItem('token');
+};

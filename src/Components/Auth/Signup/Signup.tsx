@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signup } from '../../../utils/api/auth';
 import { TextField, Button, Typography, Container, Box, Alert, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Logo from "../../Logo/Logo.tsx";
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -53,6 +54,7 @@ const Signup = () => {
                 justifyContent="center"
                 height="100vh"
             >
+                <Logo />
                 <Typography variant="h4" component="h1" gutterBottom>
                     Signup
                 </Typography>
