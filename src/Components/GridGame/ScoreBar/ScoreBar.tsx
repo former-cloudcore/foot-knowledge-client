@@ -27,9 +27,9 @@ const ScoreBar = ({ squaresNumber, playersNumber }:
         navigate('/grid/scoreboard');
     }
 
-    const saveScore = (nickname: string) => {
+    const saveScore = async (nickname: string) => {
         const playerData = { nickname, squares_number: squaresNumber, players_number: playersNumber, time };
-        add_player_to_scoreboard('grid', playerData);
+        await add_player_to_scoreboard('grid', playerData);
         goToScoreboard();
     };
 
