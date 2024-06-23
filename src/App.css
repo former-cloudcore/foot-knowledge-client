@@ -3,6 +3,12 @@ html {
   font-family: 'Suii' !important;
 }
 
+.App {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
 /* import font */
 @font-face {
   font-family: 'Suii';

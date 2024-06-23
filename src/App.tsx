@@ -1,41 +1,77 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import Home from './Components/Home/Home';
 import About from './Components/About/About';
 import GridGame from './Components/GridGame/GridGame';
-import { ThemeProvider, createTheme } from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard';
+import AuthGuard from './Components/AuthGuard';
+import Login from "./Components/Auth/Login/Login.tsx";
+import Signup from "./Components/Auth/Signup/Signup.tsx";
+import Header from "./Components/Header/Header.tsx";
+import {useEffect, useState} from "react";
+import {validateSession} from "./utils/api/auth.ts";
 
 function App() {
-  const theme = createTheme({
-    components: {
-      MuiTooltip: {
-        styleOverrides: {
-          tooltip: {
-            fontSize: '1.2rem',
-          },
+    const theme = createTheme({
+        components: {
+            MuiTooltip: {
+                styleOverrides: {
+                    tooltip: {
+                        fontSize: '1.2rem',
+                    },
+                },
+            },
         },
-      },
-    },
-    typography: {
-      fontFamily: 'Suii',
-    },
-  });
+        typography: {
+            fontFamily: 'Suii',
+        },
+    });
 
-  return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/grid" element={<GridGame />} />
-            <Route path="/grid/scoreboard" element={<ScoreBoard/>}></Route>
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </div>
-  );
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    return;
+                }
+
+                const data = await validateSession();
+                if (data.success) {
+                    setIsLoggedIn(true);
+                }
+            } catch (error) {
+                console.error('Error validating session:', error);
+            }
+        };
+
+        checkSession();
+    }, [navigate]);
+
+    return (
+        <div>
+            {isLoggedIn && <Header user={{name: ''}}/>}
+            <div className="App">
+                <ThemeProvider theme={theme}>
+                    <Routes>
+                        <Route
+                            path="*"
+                            element={<Navigate to="/login" replace={true}/>}
+                        />
+                        <Route path="/" element={<AuthGuard><Home/></AuthGuard>}/>
+                        <Route path="/about" element={<AuthGuard><About/></AuthGuard>}/>
+                        <Route path="/grid" element={<AuthGuard><GridGame/></AuthGuard>}/>
+                        <Route path="/grid/scoreboard" element={<AuthGuard><ScoreBoard/></AuthGuard>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/signup" element={<Signup/>}/>
+                    </Routes>
+                </ThemeProvider>
+            </div>
+        </div>
+    );
 }
 
 export default App;

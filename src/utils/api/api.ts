@@ -1,7 +1,7 @@
-import { teamSchema } from './api.interfaces';
-import { API_BASE } from './consts';
-import { playerSchema } from './api.interfaces';
-import { Filter, inputScoreRowSchema, scoreRowSchema } from './interfaces';
+import { teamSchema } from './api.interfaces.ts';
+import { API_BASE } from '../consts.ts';
+import { playerSchema } from './api.interfaces.ts';
+import { Filter, inputScoreRowSchema, scoreRowSchema } from '../interfaces.ts';
 
 export const fetch_all_players = async (): Promise<playerSchema[]> => {
   const response = await fetch(`${API_BASE}/players`);

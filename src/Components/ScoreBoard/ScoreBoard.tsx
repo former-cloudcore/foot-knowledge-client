@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PlayerRow from "./PlayerRow/PlayerRow";
 import css from './ScoreBoard.module.css';
-import { fetch_scoreboard } from "../../utils/api";
-import { scoreRowSchema, SecondarySortSchema } from "../../utils/api.interfaces";
+import { fetch_scoreboard } from "../../utils/api/api.ts";
+import { scoreRowSchema, SecondarySortSchema } from "../../utils/api/api.interfaces.ts";
 import { orderBy } from "lodash";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react';

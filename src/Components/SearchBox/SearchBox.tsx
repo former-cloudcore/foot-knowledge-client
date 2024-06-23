@@ -7,8 +7,8 @@ import { useTheme, styled } from '@mui/material/styles';
 import { VariableSizeList, ListChildComponentProps } from 'react-window';
 // import { fetchAllPlayers } from '../api';
 import { MenuItem } from '@mui/material';
-import { fetch_players_by_name } from '../../utils/api';
-import { playerSchema } from '../../utils/api.interfaces';
+import { fetch_players_by_name } from '../../utils/api/api.ts';
+import { playerSchema } from '../../utils/api/api.interfaces.ts';
 
 const LISTBOX_PADDING = 2; // px
 
