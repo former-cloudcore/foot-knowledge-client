@@ -1,4 +1,4 @@
-import { scoreRowSchema } from '../../../utils/api.interfaces';
+import { scoreRowSchema } from '../../../utils/api/api.interfaces.ts';
 import css from './PlayerRow.module.css';
 
 const PlayerRow = ({ score, index }: { score: scoreRowSchema, index:number }) => {

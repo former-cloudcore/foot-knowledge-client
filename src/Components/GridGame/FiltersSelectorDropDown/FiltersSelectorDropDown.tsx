@@ -1,6 +1,6 @@
 import css from './FilterSelectorDropDown.module.css';
 import { Filter } from '../../../utils/interfaces';
-import { filterSchema } from '../../../utils/api.interfaces';
+import { filterSchema } from '../../../utils/api/api.interfaces.ts';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 import { translateFilters } from '../../../utils/utils';
