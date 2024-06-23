@@ -4,8 +4,9 @@ import css from './ScoreBoard.module.css';
 import { fetch_scoreboard } from "../../utils/api/api.ts";
 import { scoreRowSchema, SecondarySortSchema } from "../../utils/api/api.interfaces.ts";
 import { orderBy } from "lodash";
-import { useLocation } from "react-router-dom";
-import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+import { useLocation, useNavigate } from "react-router-dom";
+import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react';
+import { ArrowBack } from "@mui/icons-material";
 
 const ScoreBoard = () => {
     const [game, setGame] = useState("grid");
@@ -15,6 +16,7 @@ const ScoreBoard = () => {
         useState<SecondarySortSchema>({ sortName: "players_number", sortOrder: false });
     const [isLoaded, setIsLoaded] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const setScoreBoard = async () => {
         let data = await fetch_scoreboard(game.toLowerCase());
@@ -45,30 +47,34 @@ const ScoreBoard = () => {
     }, []);
 
     return (
-        <div className={css.scoreboard}>
-            <header>
-                <div className={css.title}>{title}</div>
-                <div className={css.scoreNamesContainer}>
-                    <span className={css.scoreName}>Sqrs</span>
-                    <span className={css.scoreName} onClick={() => sortBySecondary('players_number', false)}>Players</span>
-                    <span className={css.scoreName} onClick={() => sortBySecondary('time', true)}>Time</span>
-                </div>
-            </header>
-            {!isLoaded &&<Segment>
-                <Dimmer active inverted>
-                    <Loader inverted />
-                </Dimmer>
+        <div>
+            <div className={css.scoreboard}>
+                <header>
+                    <div className={css.title}>
+                        <ArrowBack className={css.backButton} onClick={() => navigate(-1)} />
+                        <div>{title}</div></div>
+                    <div className={css.scoreNamesContainer}>
+                        <span className={css.scoreName}>Sqrs</span>
+                        <span className={css.scoreName} onClick={() => sortBySecondary('players_number', false)}>Players</span>
+                        <span className={css.scoreName} onClick={() => sortBySecondary('time', true)}>Time</span>
+                    </div>
+                </header>
+                {!isLoaded && <Segment>
+                    <Dimmer active inverted>
+                        <Loader inverted />
+                    </Dimmer>
 
-                <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png' />
-            </Segment>}
+                    <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png' />
+                </Segment>}
 
-            {scores.map((score, index) => (
-                <PlayerRow
-                    score={score}
-                    index={index}
-                    key={index}
-                />
-            ))}
+                {scores.map((score, index) => (
+                    <PlayerRow
+                        score={score}
+                        index={index}
+                        key={index}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

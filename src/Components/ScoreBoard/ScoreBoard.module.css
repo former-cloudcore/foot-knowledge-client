@@ -21,6 +21,11 @@ header .title {
     font-size: 2em;
     letter-spacing: 2px;
     font-weight: bold;
+    display: flex;
+    width: 76%;
+    justify-content: space-between;
+    margin-right: auto;
+    align-items: center;
 }
 
 .scoreboard {
@@ -44,4 +49,11 @@ header .title {
     cursor: pointer;
     font-size: 1.2em;
     color: #fff;
+}
+
+.backButton {
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

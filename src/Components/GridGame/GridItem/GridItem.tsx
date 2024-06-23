@@ -16,17 +16,20 @@ interface GridItemProps {
   onClick?: () => void;
   onPlayerAdded: () => void;
   onSquareAdded: () => void;
+  onSquareCompleted: () => void;
 }
-const GridItem = ({ filter1, filter2, id, currentFocused, searchedPlayer, onClick, onPlayerAdded: playerAdded, onSquareAdded: squareAdded }: GridItemProps) => {
+const GridItem = ({ filter1, filter2, id, currentFocused, searchedPlayer, onClick, onPlayerAdded, onSquareAdded, onSquareCompleted }: GridItemProps) => {
   const [resultsState, setResultsState] = useState<playerSchema[]>([]);
   const [confirmedPlayers, setConfirmedPlayers] = useState<playerSchema[]>([]);
   const [loading, setLoading] = useState(true);
 
   const updateScore = () => {
-    playerAdded();
-    console.log(confirmedPlayers)
+    onPlayerAdded();
     if (confirmedPlayers.length === 0) {
-      squareAdded();
+      onSquareAdded();
+      if (resultsState.length - 1 === confirmedPlayers.length) {
+        onSquareCompleted();
+      }
     }
   }
 

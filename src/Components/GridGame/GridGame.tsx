@@ -54,7 +54,7 @@ const GridGame = () => {
         if (j === 0) {
           row.push(<GridFilter {...sideFilters[i - 1]} key={`${i}-${j}`} />);
           continue;
-        } 
+        }
 
         row.push(
           <GridItem
@@ -65,8 +65,9 @@ const GridGame = () => {
             currentFocused={currentFocused}
             searchedPlayer={searchedPlayer}
             onClick={() => setCurrentFocused(`${i}-${j}`)}
-            onPlayerAdded={() => setPlayersNumber(playersNumber + 1)}
+            onPlayerAdded={() => setPlayersNumber(prevPlayersNumber => prevPlayersNumber + 1)}
             onSquareAdded={() => setSquaresNumber(prevSquaresNumber => prevSquaresNumber + 1)}
+            onSquareCompleted={() => setPlayersNumber(prevPlayersNumber => prevPlayersNumber + 3)}
           />
         );
       }
