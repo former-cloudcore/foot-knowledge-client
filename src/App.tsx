@@ -11,6 +11,7 @@ import Signup from "./Components/Auth/Signup/Signup.tsx";
 import Header from "./Components/Header/Header.tsx";
 import {useEffect, useState} from "react";
 import {validateSession} from "./utils/api/auth.ts";
+import ConnectionsGame from './Components/ConnectionsGame/ConnectionsGame.tsx';
 
 function App() {
     const theme = createTheme({
@@ -64,6 +65,7 @@ function App() {
                         <Route path="/" element={<AuthGuard><Home/></AuthGuard>}/>
                         <Route path="/about" element={<AuthGuard><About/></AuthGuard>}/>
                         <Route path="/grid" element={<AuthGuard><GridGame/></AuthGuard>}/>
+                        <Route path="/connections" element={<AuthGuard><ConnectionsGame /></AuthGuard>} />
                         <Route path="/grid/scoreboard" element={<AuthGuard><ScoreBoard/></AuthGuard>}/>
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<Signup/>}/>
