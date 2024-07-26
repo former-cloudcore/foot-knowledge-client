@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetch_players_with_filters } from '../../../utils/api/api.ts';
-import { playerSchema } from '../../../utils/api/api.interfaces.ts';
+import { fetch_players_with_filters } from '../../../utils/api';
+import { playerSchema } from '../../../utils/api.interfaces';
 import { Filter } from '../../../utils/interfaces';
 import css from './GridItem.module.css';
 import { Tooltip } from '@mui/material';
