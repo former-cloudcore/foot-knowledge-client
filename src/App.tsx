@@ -67,6 +67,7 @@ function App() {
                         <Route path="/grid" element={<GridGame/>}/>
                         <Route path="/connections" element={<ConnectionsGame />} />
                         <Route path="/grid/scoreboard" element={<ScoreBoard/>}/>
+                        <Route path="/connections/scoreboard" element={<ScoreBoard/>}/>
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<Signup/>}/>
                     </Routes>

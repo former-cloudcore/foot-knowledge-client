@@ -10,14 +10,13 @@ export interface graphData {
 interface ConnectionsGraphProps {
   graphData: graphData;
   nodesSize: Map<string, number>;
-  render: boolean;
   freezeLayout: boolean;
   customColors: boolean;
 }
 
-const ConnectionsGraph = ({ graphData, nodesSize, render, freezeLayout, customColors }: ConnectionsGraphProps) => {
+const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: ConnectionsGraphProps) => {
   // Chat gpt magic and its curves wierd for some reason
-  const drawLineWithColors = (canvas, startPoint, endPoint, colors, curvature) => {
+  const drawLineWithColors = (canvas: HTMLCanvasElement, startPoint: { x: any; y: any; }, endPoint: { x: any; y: any; }, colors: string | any[], curvature: number) => {
     const ctx = canvas.getContext('2d');
     const numSegments = 50; // You can adjust this for smoother or more detailed lines
     let currentX = startPoint.x;
@@ -36,11 +35,13 @@ const ConnectionsGraph = ({ graphData, nodesSize, render, freezeLayout, customCo
       const y = invT * invT * startPoint.y + 2 * invT * t * controlY + t * t * endPoint.y;
       const color = colors[i % colors.length]; // Cycle through colors
 
-      ctx.beginPath();
-      ctx.moveTo(currentX, currentY);
-      ctx.lineTo(x, y);
-      ctx.strokeStyle = color;
-      ctx.stroke();
+      if (ctx) {
+        ctx.beginPath();
+        ctx.moveTo(currentX, currentY);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = color;
+        ctx.stroke();
+      }
 
       currentX = x;
       currentY = y;
@@ -73,11 +74,10 @@ const ConnectionsGraph = ({ graphData, nodesSize, render, freezeLayout, customCo
     return color;
   };
 
-  return render ? (
-    <ForceGraph2D
+  return <ForceGraph2D
       graphData={graphData}
-      width={1000}
-      height={700}
+      width={850}
+      height={450}
       linkLabel={(link) => link.label + ' (' + link.years + ')'}
       linkAutoColorBy={(link) => link.label}
       linkCurvature={(link) => {
@@ -111,25 +111,22 @@ const ConnectionsGraph = ({ graphData, nodesSize, render, freezeLayout, customCo
       linkCanvasObject={
         customColors
           ? (link, ctx) => {
-              const colors = teamColors[link.label] ?? getOtherTeamsColor(link.label);
+            const colors = teamColors[link.label] ?? getOtherTeamsColor(link.label);
 
-              drawLineWithColors(
-                ctx.canvas,
-                { x: link.source.x, y: link.source.y },
-                { x: link.target.x, y: link.target.y },
-                colors,
-                link.timesMet % 2 === 0 ? 0.2 * link.timesMet : -0.2 * (link.timesMet + 1)
-              );
-            }
+            drawLineWithColors(
+              ctx.canvas,
+              { x: link.source.x, y: link.source.y },
+              { x: link.target.x, y: link.target.y },
+              colors,
+              link.timesMet % 2 === 0 ? 0.2 * link.timesMet : -0.2 * (link.timesMet + 1)
+            );
+          }
           : undefined
       }
       onLinkClick={(link) => {
         navigator.clipboard.writeText(link.label);
       }}
     />
-  ) : (
-    <div style={{ width: '1000px', height: '700px' }}></div>
-  );
 };
 
 export default ConnectionsGraph;

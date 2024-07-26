@@ -10,7 +10,7 @@ import { ArrowBack } from "@mui/icons-material";
 
 const ScoreBoard = () => {
     const [game, setGame] = useState("grid");
-    const [title] = useState(game + " Game ScoreBoard");
+    const [title, setTitle] = useState(game + " Game ScoreBoard");
     const [scores, setScores] = useState<scoreRowSchema[]>([]);
     const [secondarySort, setSecondarySort] =
         useState<SecondarySortSchema>({ sortName: "players_number", sortOrder: false });
@@ -43,8 +43,12 @@ const ScoreBoard = () => {
 
     useEffect(() => {
         setGame(getGameFromPath());
-        setScoreBoard();
     }, []);
+
+    useEffect(() => {
+        setTitle(game + " Game ScoreBoard")
+        setScoreBoard();
+    }, [game])
 
     return (
         <div>

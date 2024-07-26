@@ -91,7 +91,7 @@ const GridGame = () => {
 
   return (
     <div className={css.page} style={{ '--grid-item-size': '10rem' } as React.CSSProperties}>
-      <ScoreBar playersNumber={playersNumber} squaresNumber={squaresNumber}
+      <ScoreBar board='grid' playersNumber={playersNumber} squaresNumber={squaresNumber}
       resetTime={resetTime}></ScoreBar>
       <div className={css.gridGame}>
         <div className={css.topBar}>

@@ -16,9 +16,10 @@ export interface scoreRowSchema {
 
 export interface inputScoreRowSchema {
   nickname: string
-  squares_number: number
+  squares_number?: number
   players_number: number
   time: number
+  shortest_path?: number
 }
 
 export interface SecondarySortSchema {

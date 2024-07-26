@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import css from './QuitModal.module.css';
 
-const QuitModal = ({ isOpen, onClose, saveScore, goToScoreboard }: 
-    { isOpen: boolean, onClose: () => void, saveScore: (nickname: string) => void, goToScoreboard: () => void }) => {
+const QuitModal = ({ isOpen, onClose, saveScore, goToScoreboard, message }:
+    { isOpen: boolean, onClose: () => void, saveScore: (nickname: string) => void, goToScoreboard: () => void, message?: string }) => {
     const [nickname, setNickname] = useState("");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +23,7 @@ const QuitModal = ({ isOpen, onClose, saveScore, goToScoreboard }:
         <div className={css.modalOverlay}>
             <div className={css.modal}>
                 <div className={css.content}>
+                    {message && <div>{message}</div>}
                     <input
                         type="text"
                         value={nickname}

@@ -9,21 +9,21 @@
     .gamesButtons {
         display: flex;
         justify-content: space-between;
-        margin-top: 12vh;
-        column-gap: 10vh;
+        margin-top: 37px;
+        column-gap: 20px;
     
         .gameColumn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            row-gap: 5vh;
+            row-gap: 10px;
             background: #d8e7f4;
-            padding: 5vh;
-            border-radius: 6vh;
+            padding: 10px;
+            border-radius: 10px;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     
             .gameName {
-                font-size: 6vh;
+                font-size: 20px;
                 font-weight: 500;
                 color: #d56f81;
             }
@@ -32,8 +32,8 @@
                 cursor: pointer;
                 background: #d56f81;
                 color: #d8e7f4;
-                padding: 2vh;
-                border-radius: 3vh;
+                padding: 3px;
+                border-radius: 3px;
             }
         }
     }
