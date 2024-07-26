@@ -5,8 +5,8 @@ import css from './ScoreBar.module.css';
 import { useNavigate } from 'react-router-dom';
 import Timer from '../Timer/Timer';
 
-const ScoreBar = ({ squaresNumber, playersNumber }:
-    { squaresNumber: number, playersNumber: number }) => {
+const ScoreBar = ({ squaresNumber, playersNumber, resetTime }:
+    { squaresNumber: number, playersNumber: number, resetTime:boolean }) => {
     const [isQuitModalOpen, setIsQuitModalOpen] = useState(false);
     const [isRunning, setIsRunning] = useState(true);
     const [time, setTime] = useState(0);
@@ -44,7 +44,7 @@ const ScoreBar = ({ squaresNumber, playersNumber }:
                     <div className={css.score}>Players: {playersNumber}</div>
                     <div className={css.score}>Squares: {squaresNumber}</div>
                     <div className={css.score}>
-                        <Timer isRunning={isRunning} setTime={setTime}></Timer>
+                        <Timer isRunning={isRunning} setTime={setTime} resetTime={resetTime}></Timer>
                     </div>
                 </div>
             </div>

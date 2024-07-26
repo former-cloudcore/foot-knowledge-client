@@ -1,4 +1,4 @@
-import { filterSchema } from './api/api.interfaces.ts';
+import { filterSchema } from './api.interfaces.ts';
 import { Filter } from './interfaces.ts';
 
 interface gameFilters {

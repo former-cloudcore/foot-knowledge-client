@@ -21,6 +21,7 @@ const GridGame = () => {
   });
   const [playersNumber, setPlayersNumber] = useState(0);
   const [squaresNumber, setSquaresNumber] = useState(0);
+  const [resetTime, setResetTime] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -30,7 +31,14 @@ const GridGame = () => {
 
   useEffect(() => {
     setChoseFilters(getRandomFilters(filterState, gridSizeState[0], gridSizeState[1]));
+    resetScore();
   }, [gridSizeState, filterState]);
+
+  const resetScore = () => {
+    setPlayersNumber(0);
+    setSquaresNumber(0);
+    setResetTime(prev=>!prev);
+  }
 
   const getGrid = () => {
     const rows = [];
@@ -83,7 +91,8 @@ const GridGame = () => {
 
   return (
     <div className={css.page} style={{ '--grid-item-size': '10rem' } as React.CSSProperties}>
-      <ScoreBar playersNumber={playersNumber} squaresNumber={squaresNumber}></ScoreBar>
+      <ScoreBar playersNumber={playersNumber} squaresNumber={squaresNumber}
+      resetTime={resetTime}></ScoreBar>
       <div className={css.gridGame}>
         <div className={css.topBar}>
           <SearchBox onSelect={(playerid) => setSearchedPlayer({ player_id: playerid })} />
