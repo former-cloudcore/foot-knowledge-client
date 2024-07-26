@@ -1,0 +1,41 @@
+.home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .header{
+
+    }
+    .gamesButtons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12vh;
+        column-gap: 10vh;
+    
+        .gameColumn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            row-gap: 5vh;
+            background: #d8e7f4;
+            padding: 5vh;
+            border-radius: 6vh;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    
+            .gameName {
+                font-size: 6vh;
+                font-weight: 500;
+                color: #d56f81;
+            }
+    
+            .action {
+                cursor: pointer;
+                background: #d56f81;
+                color: #d8e7f4;
+                padding: 2vh;
+                border-radius: 3vh;
+            }
+        }
+    }
+}
+
