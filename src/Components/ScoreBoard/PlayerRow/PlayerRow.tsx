@@ -20,7 +20,7 @@ const PlayerRow = ({ score, index }: { score: scoreRowSchema, index: number }) =
             </span>
             <div className={css.counter}>
                 {score.squares_number && <span className={css.counterScore}>{score.squares_number}</span>}
-                {score.shortest_path && <span className={css.counterScore}>{score.shortest_path}</span>}
+                {score.shortest_path && <span className={css.counterScore}>{score.shortest_path === Infinity ? -1 : score.shortest_path}</span>}
                 <span className={css.counterScore}>{score.players_number}</span>
                 <span className={css.counterScore}>{score.time}</span>
             </div>

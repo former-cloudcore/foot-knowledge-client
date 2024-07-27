@@ -60,7 +60,7 @@ export interface inputScoreRowSchema {
   time: number
 }
 
-export interface SecondarySortSchema {
+export interface SortSchema {
   sortName: string;
-  sortOrder: boolean;
+  sortOrder: "asc"|"desc";
 }
