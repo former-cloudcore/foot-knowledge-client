@@ -65,8 +65,8 @@ const ScoreBar = ({ board, squaresNumber, resetTime, playersNumber, currShortest
                     goToScoreboard={goToScoreboard} saveScore={saveScore}></QuitModal>
                 <div className={css.scoresContainer}>
                     <div className={css.score}>Players: {playersNumber}</div>
-                    {squaresNumber && <div className={css.score}>Squares: {squaresNumber}</div>}
-                    {currShortestPath && <div className={css.score}>Current Shortest Path: {currShortestPath == -1 ? '∞' : currShortestPath}</div>}
+                    {squaresNumber!==undefined && <div className={css.score}>Squares: {squaresNumber}</div>}
+                    {currShortestPath!==undefined && <div className={css.score}>Current Shortest Path: {currShortestPath == -1 ? '∞' : currShortestPath}</div>}
                     <div className={css.score}>
                         <Timer isRunning={isRunning} setTime={setTime} resetTime={resetTime}></Timer>
                     </div>
