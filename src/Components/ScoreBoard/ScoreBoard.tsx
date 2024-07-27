@@ -12,6 +12,7 @@ const ScoreBoard = () => {
     const [game, setGame] = useState("grid");
     const [title, setTitle] = useState(game + " Game ScoreBoard");
     const [scores, setScores] = useState<scoreRowSchema[]>([]);
+    const [primarySort, setPrimarySort] = useState<string>("squares_number");
     const [secondarySort, setSecondarySort] =
         useState<SecondarySortSchema>({ sortName: "players_number", sortOrder: false });
     const [isLoaded, setIsLoaded] = useState(false);
@@ -26,13 +27,14 @@ const ScoreBoard = () => {
     }
 
     const sortScores = (data: scoreRowSchema[]) => {
-        return orderBy(data, ["squares_number", secondarySort.sortName], ["desc", secondarySort.sortOrder]);
+        return orderBy(data, [primarySort, secondarySort.sortName], ["desc", secondarySort.sortOrder]);
     }
 
     const sortBySecondary = (sortName: string, sortOrder: boolean) => {
         if (sortName === secondarySort.sortName) return;
         setSecondarySort({ sortName, sortOrder });
         const sortedScores = sortScores(scores);
+        console.log(sortedScores)
         setScores(sortedScores);
     }
 
@@ -46,7 +48,8 @@ const ScoreBoard = () => {
     }, []);
 
     useEffect(() => {
-        setTitle(game + " Game ScoreBoard")
+        setTitle(game + " Game ScoreBoard");
+        setPrimarySort(game === "grid" ? "squares_number" : "shortest_path");
         setScoreBoard();
     }, [game])
 
@@ -58,7 +61,7 @@ const ScoreBoard = () => {
                         <ArrowBack className={css.backButton} onClick={() => navigate(-1)} />
                         <div>{title}</div></div>
                     <div className={css.scoreNamesContainer}>
-                        <span className={css.scoreName}>Sqrs</span>
+                        <span className={css.scoreName}>{game === "grid" ? 'Sqrs' : 'Path'}</span>
                         <span className={css.scoreName} onClick={() => sortBySecondary('players_number', false)}>Players</span>
                         <span className={css.scoreName} onClick={() => sortBySecondary('time', true)}>Time</span>
                     </div>

@@ -41,7 +41,6 @@ const ScoreBar = ({ board, squaresNumber, resetTime, playersNumber, currShortest
 
     const goToScoreboard = () => {
         closeQuitModal();
-        console.log(board)
         navigate(`/${board}/scoreboard`);
     }
 

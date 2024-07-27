@@ -12,6 +12,7 @@ export interface scoreRowSchema {
   players_number: number
   time: number
   board: string
+  shortest_path: number
 }
 
 export interface inputScoreRowSchema {

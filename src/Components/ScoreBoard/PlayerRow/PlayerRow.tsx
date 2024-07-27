@@ -1,7 +1,7 @@
 import { scoreRowSchema } from '../../../utils/api/api.interfaces.ts';
 import css from './PlayerRow.module.css';
 
-const PlayerRow = ({ score, index }: { score: scoreRowSchema, index:number }) => {
+const PlayerRow = ({ score, index }: { score: scoreRowSchema, index: number }) => {
     return (
         <div className={css.player}>
             <span className={css.playerName}>
@@ -19,7 +19,8 @@ const PlayerRow = ({ score, index }: { score: scoreRowSchema, index:number }) =>
                 {score.nickname}
             </span>
             <div className={css.counter}>
-                <span className={css.counterScore}>{score.squares_number}</span>
+                {score.squares_number && <span className={css.counterScore}>{score.squares_number}</span>}
+                {score.shortest_path && <span className={css.counterScore}>{score.shortest_path}</span>}
                 <span className={css.counterScore}>{score.players_number}</span>
                 <span className={css.counterScore}>{score.time}</span>
             </div>
