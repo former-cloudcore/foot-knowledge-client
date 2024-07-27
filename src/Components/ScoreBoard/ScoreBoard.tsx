@@ -34,7 +34,6 @@ const ScoreBoard = () => {
         if (sortName === secondarySort.sortName) return;
         setSecondarySort({ sortName, sortOrder });
         const sortedScores = sortScores(scores);
-        console.log(sortedScores)
         setScores(sortedScores);
     }
 

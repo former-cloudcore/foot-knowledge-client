@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import data from '../../../utils/teamsColors.json';
+
 const teamColors = JSON.parse(JSON.stringify(data));
 
 export interface graphData {
   nodes: { id: string; img_ref: string; name: string }[];
   links: { source: string; target: string; label: string; years: string; timesMet: number }[];
 }
+
 interface ConnectionsGraphProps {
   graphData: graphData;
   nodesSize: Map<string, number>;
@@ -15,8 +17,39 @@ interface ConnectionsGraphProps {
 }
 
 const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: ConnectionsGraphProps) => {
-  // Chat gpt magic and its curves wierd for some reason
-  const drawLineWithColors = (canvas: HTMLCanvasElement, startPoint: { x: any; y: any; }, endPoint: { x: any; y: any; }, colors: string | any[], curvature: number) => {
+  // Track initial two nodes
+  const [initialNodes, setInitialNodes] = useState<{ id: string; x: number; y: number }[]>([]);
+  const fgRef = useRef(null); // Reference to the ForceGraph2D instance
+
+  useEffect(() => {
+    if (fgRef.current) {
+      const graph = fgRef.current;
+      const nodes = graphData.nodes;
+
+      if (nodes.length >= 2) {
+        const firstNode = nodes[0];
+        const secondNode = nodes[1];
+        const centerX = (firstNode.x + secondNode.x) / 2;
+        const centerY = (firstNode.y + secondNode.y) / 2;
+        
+        graph.centerAt(centerX, centerY, 1000); // Center view
+        graph.zoom(7); // Zoom in
+      }
+    }
+  }, [graphData]);
+
+  useEffect(() => {
+    if (graphData.nodes.length >= 2) {
+      // Store positions of the first two nodes
+      const [node1, node2] = graphData.nodes;
+      setInitialNodes([
+        { id: node1.id, x: node1.x || -50, y: node1.y || 0 }, // Set default positions if not already set
+        { id: node2.id, x: node2.x || 50, y: node2.y || 0 }, // Set default positions if not already set
+      ]);
+    }
+  }, [graphData.nodes]);
+
+  const drawLineWithColors = (canvas: HTMLCanvasElement, startPoint: { x: number; y: number }, endPoint: { x: number; y: number }, colors: string[], curvature: number) => {
     const ctx = canvas.getContext('2d');
     const numSegments = 50; // You can adjust this for smoother or more detailed lines
     let currentX = startPoint.x;
@@ -49,19 +82,7 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
   };
 
   const [otherTeamsColors, setOtherTeamsColors] = useState<Map<string, string[]>>(new Map());
-
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
-
-  //finds the node with the biggest node size
-  const findBiggestNode = () => {
-    let biggestNode = { id: '', size: 0 };
-    nodesSize.forEach((size, id) => {
-      if (size > biggestNode.size) {
-        biggestNode = { id, size };
-      }
-    });
-    return biggestNode;
-  };
 
   const getOtherTeamsColor = (teamName: string) => {
     if (otherTeamsColors.has(teamName)) return otherTeamsColors.get(teamName);
@@ -74,7 +95,9 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
     return color;
   };
 
-  return <ForceGraph2D
+  return (
+    <ForceGraph2D
+      ref={fgRef}
       graphData={graphData}
       width={850}
       height={450}
@@ -86,11 +109,21 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
       nodeCanvasObject={(node, ctx) => {
         const size = 5;
 
+        // Set fixed positions for the initial nodes
+        if (initialNodes.some(initialNode => initialNode.id === node.id)) {
+          const fixedNode = initialNodes.find(initialNode => initialNode.id === node.id);
+          if (fixedNode) {
+            node.fx = fixedNode.x;
+            node.fy = fixedNode.y;
+          }
+        }
+
         const img = new Image(size, size);
         img.src = node.img_ref; // Path to your node image
 
         ctx.drawImage(img, (node.x || 0) - size / 2, (node.y || 0) - size / 2, size, size);
       }}
+      cooldownTicks={freezeLayout ? 0 : Infinity}
       nodePointerAreaPaint={(node, color, ctx) => {
         const size = 5;
         ctx.fillStyle = color;
@@ -107,7 +140,8 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
       linkVisibility={(link) => {
         return !selectedNode || link.source.id === selectedNode || link.target.id === selectedNode;
       }}
-      cooldownTicks={freezeLayout ? 0 : Infinity}
+      linkDirectionalArrowLength={0} // Disable directional arrows
+      linkDirectionalParticles={0} // Disable directional particles
       linkCanvasObject={
         customColors
           ? (link, ctx) => {
@@ -126,7 +160,19 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
       onLinkClick={(link) => {
         navigator.clipboard.writeText(link.label);
       }}
+      // Ensure fixed nodes don't move during layout
+      onEngineStop={() => {
+        // Set fx and fy for fixed nodes
+        initialNodes.forEach(node => {
+          const graphNode = graphData.nodes.find(n => n.id === node.id);
+          if (graphNode) {
+            graphNode.fx = node.x;
+            graphNode.fy = node.y;
+          }
+        });
+      }}
     />
+  );
 };
 
 export default ConnectionsGraph;
