@@ -39,6 +39,16 @@ export const fetch_connections = async (player_id1: string, player_id2: string):
   return response.json();
 };
 
+export const fetch_path =
+  async (player_id1: string, player_id2: string, players_to_ignore?: string[], teams_to_ignore?: string[]): Promise<playerSchema[]> => {
+    const url: string = `${API_BASE}/games/connect_players/path?player1=${player_id1}&player2=${player_id2}`;
+    if(players_to_ignore) url.concat(`&players_to_ignore=${players_to_ignore.join(',')}`);
+    if(teams_to_ignore) url.concat(`&teams_to_ignore=${teams_to_ignore.join(',')}`);
+    const response = await fetch(url);
+
+    return response.json();
+  };
+
 export const mass_fetch_connections = async (
   player_id: string,
   players: string[]

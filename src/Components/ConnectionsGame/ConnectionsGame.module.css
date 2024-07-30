@@ -1,4 +1,7 @@
+.connectionsGame{
+  --grid-color: #c1a4f2;
 .top {
   display: flex;
   justify-content: space-around;
+}
 }

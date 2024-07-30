@@ -47,6 +47,7 @@ export interface scoreRowSchema {
   nickname: string
   squares_number: number
   players_number: number
+  shortest_path: number
   time: number
   board: string
 }
@@ -55,10 +56,11 @@ export interface inputScoreRowSchema {
   nickname: string
   squares_number: number
   players_number: number
+  shortest_path: number
   time: number
 }
 
-export interface SecondarySortSchema {
+export interface SortSchema {
   sortName: string;
-  sortOrder: boolean;
+  sortOrder: "asc"|"desc";
 }

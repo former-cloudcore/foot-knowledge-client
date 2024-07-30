@@ -17,10 +17,10 @@ export interface nationalitySchema {
 }
 
 export interface playerSchema {
-  player_id: number;
+  player_id: number | string;
   name: string;
-  name_unaccented: string;
-  birth_date: string;
+  name_unaccented?: string;
+  birth_date?: string;
   img_ref: string;
 }
 
