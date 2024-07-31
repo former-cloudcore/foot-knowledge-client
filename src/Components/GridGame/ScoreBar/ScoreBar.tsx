@@ -5,9 +5,10 @@ import css from './ScoreBar.module.css';
 import { useNavigate } from 'react-router-dom';
 import Timer from '../Timer/Timer';
 import { inputScoreRowSchema } from '../../../utils/interfaces.ts';
+import { graphData } from '../../ConnectionsGame/ConnectionsGraph/ConnectionsGraph.tsx';
 
 const ScoreBar = ({ board, squaresNumber, resetTime, playersNumber, currShortestPath, shortestPath }:
-    { board: string, squaresNumber?: number, resetTime: boolean, playersNumber: number, currShortestPath?: number, shortestPath?: number }) => {
+    { board: string, squaresNumber?: number, resetTime: boolean, playersNumber: number, currShortestPath?: number, shortestPath?: graphData['nodes'] }) => {
     const [isQuitModalOpen, setIsQuitModalOpen] = useState(false);
     const [isRunning, setIsRunning] = useState(true);
     const [time, setTime] = useState(0);
@@ -15,16 +16,17 @@ const ScoreBar = ({ board, squaresNumber, resetTime, playersNumber, currShortest
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(currShortestPath && shortestPath){
+        if (currShortestPath && shortestPath) {
             setMessageForConnectionsGame();
         }
     }, [currShortestPath, shortestPath]);
 
     const setMessageForConnectionsGame = () => {
-        if (currShortestPath == shortestPath) {
+        if (currShortestPath == shortestPath?.length) {
             setMessage('You have found the shortest path!');
         } else {
-            setMessage('You have not found the shortest path yet!');
+            const formattedShortestPath = shortestPath?.map(({ name }) => name).join('->');
+            setMessage(`You have not found the shortest path yet!  Possible Shortest Path:  ${formattedShortestPath}`);
         }
     }
 
@@ -59,14 +61,14 @@ const ScoreBar = ({ board, squaresNumber, resetTime, playersNumber, currShortest
     return (
         <div>
             <div className={css.buttonsContainer}>
-                <div className={css.button} onClick={openQuitModal}>I Quit!</div>
+                <div className={css.button} onClick={openQuitModal}>{currShortestPath && currShortestPath !== -1 ? "Submit" : "I Quit!"}</div>
                 <div className={css.button} onClick={goToScoreboard}>ScoreBoard</div>
                 <QuitModal isOpen={isQuitModalOpen} onClose={closeQuitModal} message={message}
                     goToScoreboard={goToScoreboard} saveScore={saveScore}></QuitModal>
                 <div className={css.scoresContainer}>
                     <div className={css.score}>Players: {playersNumber}</div>
-                    {squaresNumber!==undefined && <div className={css.score}>Squares: {squaresNumber}</div>}
-                    {currShortestPath!==undefined && <div className={css.score}>Current Shortest Path: {currShortestPath == -1 ? '∞' : currShortestPath}</div>}
+                    {squaresNumber !== undefined && <div className={css.score}>Squares: {squaresNumber}</div>}
+                    {currShortestPath !== undefined && <div className={css.score}>Current Shortest Path: {currShortestPath == -1 ? '∞' : currShortestPath}</div>}
                     <div className={css.score}>
                         <Timer isRunning={isRunning} setTime={setTime} resetTime={resetTime}></Timer>
                     </div>
