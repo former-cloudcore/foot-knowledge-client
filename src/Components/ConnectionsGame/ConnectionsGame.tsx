@@ -15,68 +15,91 @@ const ConnectionsGame = () => {
   const [freezeLayout, setFreezeLayout] = useState(false);
   const [isCustomColors, setIsCustomColors] = useState(false);
   const [shortestPath, setShortestPath] = useState<graphData['nodes']>([]);
-  const [currShortestPath, setCurrShortestPath] = useState<number>(-1);
+  const [currShortestPath, setCurrShortestPath] = useState<{ length: number, path: graphData['nodes'] }>
+    ({ length: - 1, path: [] });
   const [addedPlayersNum, setAddedPlayersNum] = useState<number>(0);
   const [resetTime, setResetTime] = useState(false);
+  const [isDisplayOnlyShortest, setIsDisplayOnlyShortest] = useState(false);
+  const [allNodes, setAllNodes] = useState<graphData['nodes']>([]);
+  const [allLinks, setAllLinks] = useState<graphData['links']>([]);
 
   useEffect(() => {
     initGame();
   }, [])
 
-  useEffect(() => {
-    setIsGraphDataUpdated(true);
-  }, [links]);
 
   useEffect(() => {
-    if (nodes.length < 2) return;
-    const updateGraphWithConnections = async () => {
-      const player = nodes[nodes.length - 1];
-
-      const newLinks: graphData['links'] = [];
-      const connections = await mass_fetch_connections(
-        player.id,
-        nodes.map((node) => node.id).slice(0, nodes.length - 1)
-      );
-      connections.forEach((connection) => {
-        if (connection.connections.length > 0) {
-          setNodesSize((prev) => {
-            const newMap = new Map(prev);
-            newMap.set(player.id.toString(), (prev.get(player.id.toString()) || 5) + 1);
-            newMap.set(connection.player_id.toString(), (prev.get(connection.player_id.toString()) || 5) + 1);
-            return newMap;
-          });
-
-          connection.connections.forEach((connection_detail, index) => {
-            newLinks.push({
-              source: player.id,
-              target: connection.player_id.toString(),
-              label: connection_detail.team_name,
-              years: connection_detail.years,
-              timesMet: index,
-            });
-          });
-        }
-      });
-
-      setLinks((prev) => [...prev, ...newLinks]);
-      await new Promise((resolve) => {
-        const intervalId = setInterval(() => {
-          if (isGraphDataUpdated) {
-            setIsGraphDataUpdated(false);
-            clearInterval(intervalId);
-            resolve();
-          }
-        }, 10); // Check every 10 milliseconds
-      });
-    };
-    updateGraphWithConnections();
+    if (nodes.length > 2) {
+      updateGraphWithConnections();
+    }
   }, [nodes]);
 
   useEffect(() => {
-    if (links.length > 0) {
-      setCurrShortestPath(findShortestPathLength());
+    setIsGraphDataUpdated(true);
+
+    if (links.length > 1 && !isDisplayOnlyShortest) {
+      setCurrShortestPath(findShortestPath());
     }
   }, [links])
+
+  useEffect(() => {
+    if (currShortestPath.length > 0) {
+      if (isDisplayOnlyShortest) {
+        setAllNodes(nodes);
+        setAllLinks(links);
+        setNodes(currShortestPath.path);
+        const pathLinks = links.filter(link => 
+          currShortestPath.path.find(node => node.id === link.source.id) &&
+          currShortestPath.path.find(node => node.id === link.target.id)
+        );
+        setLinks(pathLinks);
+      } else {
+        setNodes(allNodes);
+        setLinks(allLinks);
+      }
+    }
+  }, [isDisplayOnlyShortest])
+
+  const updateGraphWithConnections = async () => {
+    const player = nodes[nodes.length - 1];
+
+    const newLinks: graphData['links'] = [];
+    const connections = await mass_fetch_connections(
+      player.id,
+      nodes.map((node) => node.id).slice(0, nodes.length - 1)
+    );
+    connections.forEach((connection) => {
+      if (connection.connections.length > 0) {
+        setNodesSize((prev) => {
+          const newMap = new Map(prev);
+          newMap.set(player.id.toString(), (prev.get(player.id.toString()) || 5) + 1);
+          newMap.set(connection.player_id.toString(), (prev.get(connection.player_id.toString()) || 5) + 1);
+          return newMap;
+        });
+
+        connection.connections.forEach((connection_detail, index) => {
+          newLinks.push({
+            source: player.id,
+            target: connection.player_id.toString(),
+            label: connection_detail.team_name,
+            years: connection_detail.years,
+            timesMet: index,
+          });
+        });
+      }
+    });
+
+    setLinks((prev) => [...prev, ...newLinks]);
+    await new Promise((resolve) => {
+      const intervalId = setInterval(() => {
+        if (isGraphDataUpdated) {
+          setIsGraphDataUpdated(false);
+          clearInterval(intervalId);
+          resolve();
+        }
+      }, 10); // Check every 10 milliseconds
+    });
+  };
 
   const addPlayer = async (player: playerSchema) => {
     setIsGraphDataUpdated(false);
@@ -97,13 +120,15 @@ const ConnectionsGame = () => {
     resetScore();
     setNodes([]);
     setLinks([]);
+    setAllLinks([]);
+    setAllNodes([]);
     setNodesSize(new Map());
     initGame();
   }
 
   const resetScore = () => {
     setAddedPlayersNum(0);
-    setCurrShortestPath(0);
+    setCurrShortestPath({ length: -1, path: [] });
     setResetTime(prev => !prev);
   }
 
@@ -124,8 +149,8 @@ const ConnectionsGame = () => {
     setShortestPath(playersInPath.map((player) => convertPlayerToNode(player)));
   }
 
-  const findShortestPathLength = () => {
-    if (nodes.length < 2) return -1; // Ensure there are at least two nodes
+  const findShortestPath = () => {
+    if (nodes.length < 2) return { length: -1, path: [] }; // Ensure there are at least two nodes
 
     const startId = nodes[0].id;
     const endId = nodes[1].id;
@@ -150,12 +175,20 @@ const ConnectionsGame = () => {
     const queue = [startId];
     const visited = new Set([startId]);
     const distance = { [startId]: 0 };
+    const predecessor = { [startId]: null }; // To keep track of the path
 
     while (queue.length > 0) {
       const currentNode = queue.shift();
 
       if (currentNode === endId) {
-        return distance[currentNode] + 1;
+        const path = [];
+        let step = endId;
+        while (step !== null) {
+          const node = nodes.find((n) => n.id === step); // Find the node object
+          if (node) path.unshift(node); // Add the node object to the path
+          step = predecessor[step];
+        }
+        return { length: distance[currentNode] + 1, path };
       }
 
       adjList[currentNode]?.forEach((neighbor) => {
@@ -163,12 +196,14 @@ const ConnectionsGame = () => {
           visited.add(neighbor);
           queue.push(neighbor);
           distance[neighbor] = distance[currentNode] + 1;
+          predecessor[neighbor] = currentNode; // Record the predecessor
         }
       });
     }
 
-    return -1; // Return -1 if no path found
+    return { length: -1, path: [] }; // Return -1 if no path found
   };
+
 
   const convertPlayerToNode = (player: playerSchema) => {
     return { id: player.player_id.toString(), img_ref: player.img_ref, name: player.name }
@@ -193,6 +228,9 @@ const ConnectionsGame = () => {
           <button onClick={() => setIsCustomColors((prev) => !prev)}>
             {isCustomColors ? 'Default colors' : 'Custom colors'}
           </button>
+          <button onClick={() => setIsDisplayOnlyShortest((prev) => !prev)} disabled={!currShortestPath.path.length}>
+            {isDisplayOnlyShortest ? 'All Connections' : 'Shortest Path Only'}
+          </button>
         </div>
       </div>
       <div className={css.connectionsGameBoard}>
@@ -203,8 +241,8 @@ const ConnectionsGame = () => {
           customColors={isCustomColors}
         />
       </div>
-      <ScoreBar board='connections' playersNumber={addedPlayersNum} resetTime={resetTime} currShortestPath={currShortestPath}
-      shortestPath={shortestPath.length}></ScoreBar>
+      <ScoreBar board='connections' playersNumber={addedPlayersNum} resetTime={resetTime} currShortestPath={currShortestPath.length}
+        shortestPath={shortestPath}></ScoreBar>
     </div>
   );
 };
