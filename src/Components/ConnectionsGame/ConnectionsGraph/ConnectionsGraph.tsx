@@ -11,12 +11,11 @@ export interface graphData {
 
 interface ConnectionsGraphProps {
   graphData: graphData;
-  nodesSize: Map<string, number>;
   freezeLayout: boolean;
   customColors: boolean;
 }
 
-const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: ConnectionsGraphProps) => {
+const ConnectionsGraph = ({ graphData, freezeLayout, customColors }: ConnectionsGraphProps) => {
   const fgRef = useRef(null); // Reference to the ForceGraph2D instance
 
   // Set initial positions for the first two nodes
@@ -118,7 +117,7 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
         ctx.fillStyle = color;
         ctx.fillRect((node.x || 0) - size / 2, (node.y || 0) - size / 2, size, size); // draw square as pointer trap
       }}
-      nodeLabel={(node) => node.name + ' (' + ((nodesSize.get(node.id) || 5) - 5) + ')'}
+      nodeLabel={(node) => node.name}
       onNodeClick={(node) => {
         if (selectedNode === node.id) {
           setSelectedNode(null);
