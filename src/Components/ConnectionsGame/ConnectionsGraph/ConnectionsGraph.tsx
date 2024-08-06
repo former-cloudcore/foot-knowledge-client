@@ -97,8 +97,8 @@ const ConnectionsGraph = ({ graphData, nodesSize, freezeLayout, customColors }: 
     <ForceGraph2D
       ref={fgRef}
       graphData={graphData}
-      width={850}
-      height={450}
+      width={1000}
+      height={700}
       linkLabel={(link) => link.label + ' (' + link.years + ')'}
       linkAutoColorBy={(link) => link.label}
       linkCurvature={(link) => {

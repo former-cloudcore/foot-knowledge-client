@@ -47,8 +47,9 @@ const ConnectionsGame = () => {
       if (isDisplayOnlyShortest) {
         setAllNodes(nodes);
         setAllLinks(links);
-        setNodes(currShortestPath.path);
-        const pathLinks = links.filter(link => 
+        const pathNodes = nodes.filter(node => currShortestPath.path.find(pathNode => pathNode.id === node.id));
+        setNodes(pathNodes);
+        const pathLinks = links.filter(link =>
           currShortestPath.path.find(node => node.id === link.source.id) &&
           currShortestPath.path.find(node => node.id === link.target.id)
         );
