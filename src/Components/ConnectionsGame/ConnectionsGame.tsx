@@ -10,7 +10,6 @@ import { playersBank } from '../../utils/connectionStuff.json';
 const ConnectionsGame = () => {
   const [nodes, setNodes] = useState<graphData['nodes']>([]);
   const [links, setLinks] = useState<graphData['links']>([]);
-  const [nodesSize, setNodesSize] = useState<Map<string, number>>(new Map());
   const [isGraphDataUpdated, setIsGraphDataUpdated] = useState(true);
   const [freezeLayout, setFreezeLayout] = useState(false);
   const [isCustomColors, setIsCustomColors] = useState(false);
@@ -47,8 +46,9 @@ const ConnectionsGame = () => {
       if (isDisplayOnlyShortest) {
         setAllNodes(nodes);
         setAllLinks(links);
-        setNodes(currShortestPath.path);
-        const pathLinks = links.filter(link => 
+        const pathNodes = nodes.filter(node => currShortestPath.path.find(pathNode => pathNode.id === node.id));
+        setNodes(pathNodes);
+        const pathLinks = links.filter(link =>
           currShortestPath.path.find(node => node.id === link.source.id) &&
           currShortestPath.path.find(node => node.id === link.target.id)
         );
@@ -70,13 +70,6 @@ const ConnectionsGame = () => {
     );
     connections.forEach((connection) => {
       if (connection.connections.length > 0) {
-        setNodesSize((prev) => {
-          const newMap = new Map(prev);
-          newMap.set(player.id.toString(), (prev.get(player.id.toString()) || 5) + 1);
-          newMap.set(connection.player_id.toString(), (prev.get(connection.player_id.toString()) || 5) + 1);
-          return newMap;
-        });
-
         connection.connections.forEach((connection_detail, index) => {
           newLinks.push({
             source: player.id,
@@ -122,7 +115,6 @@ const ConnectionsGame = () => {
     setLinks([]);
     setAllLinks([]);
     setAllNodes([]);
-    setNodesSize(new Map());
     initGame();
   }
 
@@ -236,7 +228,6 @@ const ConnectionsGame = () => {
       <div className={css.connectionsGameBoard}>
         <ConnectionsGraph
           graphData={{ nodes, links }}
-          nodesSize={nodesSize}
           freezeLayout={freezeLayout}
           customColors={isCustomColors}
         />
