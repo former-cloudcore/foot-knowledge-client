@@ -7,6 +7,9 @@ import { fetch_connections, fetch_path, mass_fetch_connections } from '../../uti
 import ScoreBar from '../GridGame/ScoreBar/ScoreBar';
 import { playersBank } from '../../utils/connectionStuff.json';
 import PlayerHistory from '../Common/PlayerHistory/PlayerHistory';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import HomeIcon from '@mui/icons-material/Home';
+import { useNavigate } from 'react-router-dom';
 
 const ConnectionsGame = () => {
 	const [nodes, setNodes] = useState<graphData['nodes']>([]);
@@ -22,6 +25,7 @@ const ConnectionsGame = () => {
 	const [allNodes, setAllNodes] = useState<graphData['nodes']>([]);
 	const [allLinks, setAllLinks] = useState<graphData['links']>([]);
 	const [playerHistoryPlayerId, setPlayerHistoryPlayerId] = useState('');
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		initGame();
@@ -200,7 +204,10 @@ const ConnectionsGame = () => {
 	return (
 		<div className={css.connectionsGame}>
 			<div className={css.connectionsGameHeader}>
-				<h1>Connections Game</h1>
+				<div className={css.headline}>
+				<h1 className={css.title}>Connections Game</h1>
+				<HomeIcon className={css.home} onClick={() => navigate('/')} />
+				</div>
 				<div className={css.top}>
 					<SearchBox
 						onSelectFullPlayer={player => {
@@ -209,10 +216,10 @@ const ConnectionsGame = () => {
 							}
 						}}
 					/>
-					<button onClick={restartGame}>Restart game</button>
-					<button onClick={() => setFreezeLayout(prev => !prev)}>{freezeLayout ? 'Unlock nodes' : 'Lock nodes'}</button>
-					<button onClick={() => setIsCustomColors(prev => !prev)}>{isCustomColors ? 'Default colors' : 'Custom colors'}</button>
-					<button onClick={() => setIsDisplayOnlyShortest(prev => !prev)} disabled={!currShortestPath.path.length}>
+					<button className={css.button} onClick={restartGame}>Restart game</button>
+					<button className={css.button} onClick={() => setFreezeLayout(prev => !prev)}>{freezeLayout ? 'Unlock nodes' : 'Lock nodes'}</button>
+					<button className={css.button} onClick={() => setIsCustomColors(prev => !prev)}>{isCustomColors ? 'Default colors' : 'Custom colors'}</button>
+					<button className={css.button} onClick={() => setIsDisplayOnlyShortest(prev => !prev)} disabled={!currShortestPath.path.length}>
 						{isDisplayOnlyShortest ? 'All Connections' : 'Shortest Path Only'}
 					</button>
 				</div>
@@ -225,6 +232,7 @@ const ConnectionsGame = () => {
 					nodeRightClick={player_id => setPlayerHistoryPlayerId(player_id)}
 				/>
 			</div>
+			<div className={css.guide}>{nodes?.[0]?.name} <SyncAltIcon />{nodes?.[1]?.name}</div>
 			<ScoreBar
 				board='connections'
 				playersNumber={addedPlayersNum}
