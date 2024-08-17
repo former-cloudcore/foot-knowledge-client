@@ -58,15 +58,18 @@ function App() {
 			<div className='App'>
 				<ThemeProvider theme={theme}>
 					<Routes>
-						<Route path='*' element={<Navigate to='/login' replace={true} />} />
-						<Route path='/' element={<Home />} />
-						<Route path='/about' element={<About />} />
-						<Route path='/grid' element={<GridGame />} />
-						<Route path='/connections' element={<ConnectionsGame />} />
-						<Route path='/grid/scoreboard' element={<ScoreBoard />} />
-						<Route path='/connections/scoreboard' element={<ScoreBoard />} />
-						<Route path='/login' element={<Login />} />
-						<Route path='/signup' element={<Signup />} />
+						<Route
+							path="*"
+							element={<Navigate to="/login" replace={true} />}
+						/>
+						<Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
+						<Route path="/about" element={<AuthGuard><About /></AuthGuard>} />
+						<Route path="/grid" element={<AuthGuard><GridGame /></AuthGuard>} />
+						<Route path="/grid/scoreboard" element={<AuthGuard><ScoreBoard /></AuthGuard>} />\
+						<Route path='/connections/scoreboard' element={<AuthGuard><ScoreBoard /></AuthGuard>} />
+						<Route path="/connections" element={<AuthGuard><ConnectionsGame /></AuthGuard>} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/signup" element={<Signup />} />
 					</Routes>
 				</ThemeProvider>
 			</div>
