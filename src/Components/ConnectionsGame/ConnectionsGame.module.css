@@ -1,0 +1,39 @@
+.connectionsGame {
+  --grid-color: #c1a4f2;
+
+  .button {
+    opacity: 0.8;
+    border-radius: 15px;
+    height: 55px;
+    border: 1px solid;
+  }
+
+  .headline {
+    display: flex;
+    align-items: center;
+
+    .title {
+      width: 260px;
+    }
+
+    .home {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  }
+
+  .guide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--grid-color);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}

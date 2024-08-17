@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 type Timeout = ReturnType<typeof setTimeout>;
 
-const Timer = ({ isRunning, setTime }: { isRunning: boolean; setTime: (seconds: number) => void }) => {
+const Timer = ({ isRunning, setTime, resetTime }: 
+    { isRunning: boolean; setTime: (seconds: number) => void , resetTime:boolean}) => {
     const [seconds, setSeconds] = useState(0);
 
     useEffect(() => {
@@ -27,6 +28,10 @@ const Timer = ({ isRunning, setTime }: { isRunning: boolean; setTime: (seconds: 
             }
         };
     }, [isRunning]);
+
+    useEffect(() => {
+        setSeconds(0); 
+      }, [resetTime]);
 
     return (
         <div>
