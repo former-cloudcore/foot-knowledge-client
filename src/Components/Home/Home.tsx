@@ -27,6 +27,8 @@ const Home = () => {
     }, []);
 
     const generateImage = async () => {
+        if (!imageName) return;
+
         setIsLoading(true);
         try {
             const newImageName = await generateProfileImage(imageName);
@@ -51,6 +53,9 @@ const Home = () => {
         setImageName(event.target.value);
     };
 
+    const isButtonDisabled = isLoading || !imageName.trim();
+    const isInputDisabled = isLoading;
+
     return (
         <div className={css.home}>
             <div className={css.header}>
@@ -73,11 +78,17 @@ const Home = () => {
                 <div className={css.promptInput}>
                     <input
                         type="text"
-                        placeholder="Enter new profile image name"
+                        placeholder="Profile image prompt"
                         value={imageName}
                         onChange={handleInputChange}
+                        disabled={isInputDisabled}
                     />
-                    <button onClick={generateImage}>Generate</button>
+                    <button 
+                        onClick={generateImage} 
+                        disabled={isButtonDisabled}
+                    >
+                        Generate
+                    </button>
                 </div>
                 <p>This is the home page.</p>
                 <SearchBox onSelect={player => console.log(player)} />
