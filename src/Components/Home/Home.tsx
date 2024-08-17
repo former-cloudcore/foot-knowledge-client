@@ -59,7 +59,7 @@ const Home = () => {
                     <img
                         src={loadingGif}
                         alt="Loading"
-                        className={css.loadingGif}
+                        className={css.userImage}
                     />
                 ) : (
                     profile?.image && (
