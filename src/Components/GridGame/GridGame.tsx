@@ -9,6 +9,8 @@ import SearchBox from '../Common/SearchBox/SearchBox';
 import GridSizeDropDown from './GridSizeDropDown/GridSizeDropDown';
 import FiltersSelectorDropDown from './FiltersSelectorDropDown/FiltersSelectorDropDown';
 import ScoreBar from './ScoreBar/ScoreBar';
+import HomeIcon from '@mui/icons-material/Home';
+import { useNavigate } from 'react-router-dom';
 
 const GridGame = () => {
 	const [gridSizeState, setGridSizeState] = useState<[number, number]>([5, 5]);
@@ -22,6 +24,7 @@ const GridGame = () => {
 	const [playersNumber, setPlayersNumber] = useState(0);
 	const [squaresNumber, setSquaresNumber] = useState(0);
 	const [resetTime, setResetTime] = useState(false);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
@@ -91,6 +94,10 @@ const GridGame = () => {
 
 	return (
 		<div className={css.page} style={{ '--grid-item-size': '10rem' } as React.CSSProperties}>
+			<div className={css.headline}>
+				<h1 className={css.title}>Grid Game</h1>
+				<HomeIcon className={css.home} onClick={() => navigate('/')} />
+			</div>
 			<ScoreBar board='grid' playersNumber={playersNumber} squaresNumber={squaresNumber} resetTime={resetTime}></ScoreBar>
 			<div className={css.gridGame}>
 				<div className={css.topBar}>

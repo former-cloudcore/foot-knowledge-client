@@ -7,11 +7,13 @@ import { fetch_connections, fetch_path, mass_fetch_connections } from '../../uti
 import ScoreBar from '../GridGame/ScoreBar/ScoreBar';
 import { playersBank } from '../../utils/connectionStuff.json';
 import PlayerHistory from '../Common/PlayerHistory/PlayerHistory';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import HomeIcon from '@mui/icons-material/Home';
+import { useNavigate } from 'react-router-dom';
 
 const ConnectionsGame = () => {
 	const [nodes, setNodes] = useState<graphData['nodes']>([]);
 	const [links, setLinks] = useState<graphData['links']>([]);
-	const [nodesSize, setNodesSize] = useState<Map<string, number>>(new Map());
 	const [isGraphDataUpdated, setIsGraphDataUpdated] = useState(true);
 	const [freezeLayout, setFreezeLayout] = useState(false);
 	const [isCustomColors, setIsCustomColors] = useState(false);
@@ -23,6 +25,7 @@ const ConnectionsGame = () => {
 	const [allNodes, setAllNodes] = useState<graphData['nodes']>([]);
 	const [allLinks, setAllLinks] = useState<graphData['links']>([]);
 	const [playerHistoryPlayerId, setPlayerHistoryPlayerId] = useState('');
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		initGame();
@@ -68,13 +71,6 @@ const ConnectionsGame = () => {
 		const connections = await mass_fetch_connections(player.id, nodes.map(node => node.id).slice(0, nodes.length - 1));
 		connections.forEach(connection => {
 			if (connection.connections.length > 0) {
-				setNodesSize(prev => {
-					const newMap = new Map(prev);
-					newMap.set(player.id.toString(), (prev.get(player.id.toString()) || 5) + 1);
-					newMap.set(connection.player_id.toString(), (prev.get(connection.player_id.toString()) || 5) + 1);
-					return newMap;
-				});
-
 				connection.connections.forEach((connection_detail, index) => {
 					newLinks.push({
 						source: player.id,
@@ -120,7 +116,6 @@ const ConnectionsGame = () => {
 		setLinks([]);
 		setAllLinks([]);
 		setAllNodes([]);
-		setNodesSize(new Map());
 		initGame();
 	};
 
@@ -209,7 +204,10 @@ const ConnectionsGame = () => {
 	return (
 		<div className={css.connectionsGame}>
 			<div className={css.connectionsGameHeader}>
-				<h1>Connections Game</h1>
+				<div className={css.headline}>
+				<h1 className={css.title}>Connections Game</h1>
+				<HomeIcon className={css.home} onClick={() => navigate('/')} />
+				</div>
 				<div className={css.top}>
 					<SearchBox
 						onSelectFullPlayer={player => {
@@ -218,10 +216,10 @@ const ConnectionsGame = () => {
 							}
 						}}
 					/>
-					<button onClick={restartGame}>Restart game</button>
-					<button onClick={() => setFreezeLayout(prev => !prev)}>{freezeLayout ? 'Unlock nodes' : 'Lock nodes'}</button>
-					<button onClick={() => setIsCustomColors(prev => !prev)}>{isCustomColors ? 'Default colors' : 'Custom colors'}</button>
-					<button onClick={() => setIsDisplayOnlyShortest(prev => !prev)} disabled={!currShortestPath.path.length}>
+					<button className={css.button} onClick={restartGame}>Restart game</button>
+					<button className={css.button} onClick={() => setFreezeLayout(prev => !prev)}>{freezeLayout ? 'Unlock nodes' : 'Lock nodes'}</button>
+					<button className={css.button} onClick={() => setIsCustomColors(prev => !prev)}>{isCustomColors ? 'Default colors' : 'Custom colors'}</button>
+					<button className={css.button} onClick={() => setIsDisplayOnlyShortest(prev => !prev)} disabled={!currShortestPath.path.length}>
 						{isDisplayOnlyShortest ? 'All Connections' : 'Shortest Path Only'}
 					</button>
 				</div>
@@ -229,12 +227,12 @@ const ConnectionsGame = () => {
 			<div className={css.connectionsGameBoard}>
 				<ConnectionsGraph
 					graphData={{ nodes, links }}
-					nodesSize={nodesSize}
 					freezeLayout={freezeLayout}
 					customColors={isCustomColors}
 					nodeRightClick={player_id => setPlayerHistoryPlayerId(player_id)}
 				/>
 			</div>
+			<div className={css.guide}>{nodes?.[0]?.name} <SyncAltIcon />{nodes?.[1]?.name}</div>
 			<ScoreBar
 				board='connections'
 				playersNumber={addedPlayersNum}

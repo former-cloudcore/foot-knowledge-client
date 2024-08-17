@@ -1,6 +1,5 @@
 .page {
-  height: 100vh;
-  margin-top: 5vh;
+  height: 140vh;
   display: flex;
   flex-direction: column;
   row-gap: 5px;
@@ -17,6 +16,7 @@
 
 .row {
   display: flex;
+  overflow: hidden;
 }
 
 .topLeft {
@@ -34,4 +34,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.headline {
+  display: flex;
+  align-items: center;
+
+  .title {
+    width: 150px;
+  }
+
+  .home {
+    font-size: 30px;
+    cursor: pointer;
+  }
 }
