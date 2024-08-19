@@ -1,17 +1,60 @@
-.home{
+.home {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    .header{
 
+    .header {
+        text-transform: none;
+
+        .userImage {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .promptInput {
+
+            input {
+                padding: 8px;
+                border: 1px solid #d56f81;
+                border-radius: 4px;
+                margin-right: 10px;
+                outline: none;
+                width: 200px;
+            }
+
+            button {
+                padding: 8px 16px;
+                background-color: #d56f81;
+                color: #d8e7f4;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                outline: none;
+            }
+
+            button:disabled {
+                background-color: #ccc;
+                color: #888;
+                cursor: not-allowed;
+            }
+
+            button:disabled:hover {
+                background-color: #ccc;
+            }
+
+        }
     }
+
     .gamesButtons {
         display: flex;
         justify-content: space-between;
         margin-top: 37px;
         column-gap: 20px;
-    
+
         .gameColumn {
             display: flex;
             flex-direction: column;
@@ -21,13 +64,13 @@
             padding: 10px;
             border-radius: 10px;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    
+
             .gameName {
                 font-size: 20px;
                 font-weight: 500;
                 color: #d56f81;
             }
-    
+
             .action {
                 cursor: pointer;
                 background: #d56f81;
@@ -38,4 +81,3 @@
         }
     }
 }
-

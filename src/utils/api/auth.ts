@@ -64,6 +64,40 @@ export const validateSession = async (): Promise<{ success: boolean }> => {
     return response.json();
 };
 
+export const userProfile = async (): Promise<{ name: string, image: string }> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${AUTH_API_BASE}/auth/userProfile`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to get profile');
+    }
+
+    return response.json();
+};
+
+export const generateProfileImage = async (prompt: string): Promise<{image: string}> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${AUTH_API_BASE}/auth/generateProfileImage`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({prompt}),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to generate profile image');
+    }
+
+    return response.json();
+}
+
 export const logout = async (): Promise<void> => {
     await fetch(`${AUTH_API_BASE}/auth/logout`, {
         method: 'POST',
