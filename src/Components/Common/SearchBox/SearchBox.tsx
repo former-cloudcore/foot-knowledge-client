@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -9,6 +9,7 @@ import { VariableSizeList, ListChildComponentProps } from 'react-window';
 import { MenuItem } from '@mui/material';
 import { fetch_players_by_name } from '../../../utils/api/api';
 import { playerSchema } from '../../../utils/api/api.interfaces';
+import { useDebounce } from 'use-debounce';
 
 const LISTBOX_PADDING = 2; // px
 
@@ -133,7 +134,8 @@ export default function SearchBox({ onSelect, onSelectFullPlayer }: SearchBoxPro
 			},
 		},
 	});
-	const searchRef = useRef<HTMLInputElement>();
+	const [searchValue, setSearchValue] = useState('');
+	const [searchText] = useDebounce(searchValue, 700);
 	const [isLoading, setIsLoading] = useState(false);
 	const [players, setPlayers] = useState<playerSchema[]>([]);
 	// A state that will hold the seach value
@@ -145,11 +147,10 @@ export default function SearchBox({ onSelect, onSelectFullPlayer }: SearchBoxPro
 		setIsLoading(() => false);
 	};
 
-	const updateSearch = async () => {
-		if (searchRef.current == undefined) return;
+	useEffect(() => {
 		setIsLoading(() => true);
-		await fetch_options_by_search(searchRef.current.value);
-	};
+		fetch_options_by_search(searchText);
+	}, [searchText]);
 
 	return (
 		<div style={{ width: '20vw' }}>
@@ -164,7 +165,7 @@ export default function SearchBox({ onSelect, onSelectFullPlayer }: SearchBoxPro
 				noOptionsText={'Learn how to fucking spell ronaldo'}
 				options={players}
 				// renderInput={params => <TextField inputRef={searchRef} {...params} label='Player search' />}
-				renderInput={params => <TextField inputRef={searchRef} onChange={() => updateSearch()} {...params} label='Player search' />}
+				renderInput={params => <TextField onChange={event => setSearchValue(event.target.value)} {...params} label='Player search' />}
 				renderOption={(_props, option) => option as unknown as React.ReactNode}
 				getOptionLabel={option => option.name_unaccented}
 			/>
