@@ -76,7 +76,18 @@ const GridItem = ({
 				{ [css.selected]: currentFocused === id },
 				{ [css.complete]: resultsState.length === confirmedPlayers.length && resultsState.length !== 0 },
 			)}
-			onClick={onClick}
+			onContextMenu={e => {
+				e.preventDefault();
+				console.log(resultsState.map(player => player.name));
+			}}
+			onClick={e => {
+				console.log('Right click');
+				if (e.type === 'click') {
+					onClick && onClick();
+				} else if (e.type === 'contextmenu') {
+					e.preventDefault();
+				}
+			}}
 		>
 			{resultsState.length === 0 ? (
 				<Tooltip title='No players exist'>

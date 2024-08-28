@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Popper from '@mui/material/Popper';
 import { useTheme, styled } from '@mui/material/styles';
 import { VariableSizeList, ListChildComponentProps } from 'react-window';
-// import { fetchAllPlayers } from '../api';
 import { MenuItem } from '@mui/material';
 import { fetch_players_by_name } from '../../../utils/api/api';
 import { playerSchema } from '../../../utils/api/api.interfaces';
