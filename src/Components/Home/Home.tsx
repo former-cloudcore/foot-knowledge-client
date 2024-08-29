@@ -19,6 +19,7 @@ const Home = () => {
 			try {
 				const data = await userProfile();
 				setProfile(data);
+				localStorage.setItem('name', data.name);
 			} catch (error) {
 				console.error('Error fetching profile:', error);
 			}

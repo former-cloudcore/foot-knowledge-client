@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import css from './QuitModal.module.css';
 
 const QuitModal = ({ isOpen, onClose, saveScore, goToScoreboard, message }:
     { isOpen: boolean, onClose: () => void, saveScore: (nickname: string) => void, goToScoreboard: () => void, message?: string }) => {
     const [nickname, setNickname] = useState("");
+
+    useEffect(() => {
+        setNickname(localStorage.getItem("name") || "");
+    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNickname(e.target.value);
@@ -30,7 +34,6 @@ const QuitModal = ({ isOpen, onClose, saveScore, goToScoreboard, message }:
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         className={css.nicknameInput}
-                        placeholder='Enter nickname to save your score'
                     />
                     <div className={css.buttonsContainer}>
                         <button className={css.button} onClick={onClose}>Cancel</button>
