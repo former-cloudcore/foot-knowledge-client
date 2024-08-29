@@ -49,7 +49,7 @@ const ScoreBar = ({ board, squaresNumber, resetTime, playersNumber, currShortest
     const saveScore = async (nickname: string) => {
         const playerData: inputScoreRowSchema = { nickname, players_number: playersNumber, time };
         if (squaresNumber) {
-            playerData.squares_number = squaresNumber;
+            playerData.squares_number = squaresNumber ?? 0;
         }
         if (currShortestPath) {
             playerData.shortest_path = currShortestPath;
